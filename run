@@ -1,0 +1,33 @@
+from PIL import Image
+from openpyxl import Workbook
+
+def convert_image_to_excel(image_path, excel_path):
+    # Open the image using PIL
+    image = Image.open(image_path)
+
+    # Convert the image to grayscale
+    gray_image = image.convert("L")
+
+    # Get pixel data from the grayscale image
+    pixel_data = list(gray_image.getdata())
+
+    # Create a new Excel workbook
+    workbook = Workbook()
+    sheet = workbook.active
+
+    # Write pixel values to the Excel sheet
+    for row in range(gray_image.height):
+        for col in range(gray_image.width):
+            pixel_value = pixel_data[row * gray_image.width + col]
+            sheet.cell(row=row+1, column=col+1).value = pixel_value
+
+    # Save the Excel workbook
+    workbook.save(excel_path)
+    print("Image data successfully converted to Excel!")
+
+# Specify the paths for the input image and output Excel file
+image_path = "path/to/your/image.jpg"
+excel_path = "path/to/your/output.xlsx"
+
+# Call the conversion function
+convert_image_to_excel(image_path, excel_path)
